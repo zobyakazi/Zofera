@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zofèra | American Diamond Jewelry</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-deep: #0d1f17;
+    --green-mid:  #14281e;
+    --green-card: #172b20;
+    --green-border: #2a4535;
+    --green-hover: #1e3829;
+    --gold:       #c9a84c;
+    --gold-light: #e2c97e;
+    --gold-pale:  #f5e9c4;
+    --cream:      #f7f1e3;
+    --text-muted: #8aab96;
+    --white:      #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--green-deep);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--green-deep);
+    border-bottom: 0.5px solid var(--green-border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; font-style: italic;
+    color: var(--gold-light);
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .logo span {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 9px; font-style: normal; font-weight: 400;
+    letter-spacing: 0.22em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .cart-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: transparent;
+    border: 0.5px solid var(--green-border);
+    color: var(--gold-light);
+    padding: 8px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px; font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .cart-btn:hover { background: var(--green-hover); border-color: var(--gold); }
+  .cart-btn .cart-dot {
+    width: 18px; height: 18px;
+    background: var(--gold);
+    border-radius: 50%;
+    color: var(--green-deep);
+    font-size: 10px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    display: none;
+  }
+  .cart-btn .cart-dot.visible { display: flex; }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    border-bottom: 0.5px solid var(--green-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '✦';
+    position: absolute;
+    font-size: 300px;
+    color: rgba(201,168,76,0.03);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px; font-weight: 400;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 7vw, 64px);
+    font-weight: 300; font-style: italic;
+    color: var(--gold-light);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .hero-sub {
+    font-size: 13px; font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    max-width: 360px; margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex; gap: 0;
+    overflow-x: auto;
+    padding: 1.4rem 2rem;
+    border-bottom: 0.5px solid var(--green-border);
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: none; border-bottom: 1.5px solid transparent;
+    color: var(--text-muted);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px; font-weight: 400;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 6px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { color: var(--gold-light); }
+  .filter-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── GRID ── */
+  .grid-section { padding: 2rem; }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .product-card {
+    background: var(--green-card);
+    border: 0.5px solid var(--green-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+    cursor: default;
+  }
+  .product-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-2px);
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--green-mid);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .card-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .product-card:hover .card-image img { transform: scale(1.04); }
+
+  .card-image .img-placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    color: var(--green-border);
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .card-image .img-placeholder svg { width: 36px; height: 36px; stroke: var(--green-border); fill: none; }
+
+  .card-cat-badge {
+    position: absolute; top: 10px; left: 10px;
+    font-size: 9px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(13,31,23,0.85);
+    padding: 3px 9px;
+    border: 0.5px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+  }
+
+  .card-body { padding: 14px 16px 16px; }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; font-weight: 400;
+    color: var(--cream);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-price {
+    font-size: 15px; font-weight: 400;
+    color: var(--gold-light);
+    letter-spacing: 0.02em;
+  }
+  .card-price span { font-size: 11px; color: var(--text-muted); margin-right: 2px; }
+
+  .add-btn {
+    background: transparent;
+    border: 0.5px solid var(--green-border);
+    color: var(--gold-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: var(--green-hover); border-color: var(--gold); }
+  .add-btn.added {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: var(--text-muted);
+    font-size: 13px; letter-spacing: 0.08em;
+  }
+
+  /* ── CART DRAWER ── */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+  }
+  .overlay.open { display: block; }
+
+  .drawer {
+    position: fixed; top: 0; right: -420px; bottom: 0;
+    width: min(420px, 100vw);
+    background: var(--green-mid);
+    border-left: 0.5px solid var(--green-border);
+    z-index: 201;
+    display: flex; flex-direction: column;
+    transition: right 0.3s ease;
+  }
+  .drawer.open { right: 0; }
+
+  .drawer-head {
+    padding: 1.5rem;
+    border-bottom: 0.5px solid var(--green-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .drawer-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-style: italic; font-weight: 400;
+    color: var(--gold-light);
+  }
+
+  .close-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 22px; line-height: 1;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+  .close-btn:hover { color: var(--cream); }
+
+  .drawer-items {
+    flex: 1; overflow-y: auto;
+    padding: 1rem 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-border) transparent;
+  }
+
+  .drawer-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--green-border);
+  }
+
+  .drawer-item-img {
+    width: 52px; height: 52px;
+    border-radius: 3px;
+    background: var(--green-card);
+    border: 0.5px solid var(--green-border);
+    overflow: hidden; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .drawer-item-img img { width: 100%; height: 100%; object-fit: cover; }
+  .drawer-item-img .no-img { font-size: 20px; }
+
+  .drawer-item-info { flex: 1; }
+  .drawer-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; color: var(--cream);
+  }
+  .drawer-item-price { font-size: 12px; color: var(--gold-light); margin-top: 2px; }
+
+  .qty-ctrl {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qty-btn {
+    width: 24px; height: 24px;
+    background: none;
+    border: 0.5px solid var(--green-border);
+    border-radius: 2px;
+    color: var(--gold-light);
+    font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .qty-btn:hover { border-color: var(--gold); }
+  .qty-num { font-size: 13px; color: var(--cream); min-width: 16px; text-align: center; }
+
+  .drawer-foot {
+    padding: 1.5rem;
+    border-top: 0.5px solid var(--green-border);
+  }
+
+  .drawer-total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 1rem;
+  }
+  .drawer-total-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+  .drawer-total-val { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold-light); }
+
+  .drawer-note {
+    font-size: 11px; color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    padding: 10px 12px;
+    border: 0.5px solid var(--green-border);
+    border-radius: 2px;
+  }
+
+  .wa-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%;
+    background: #1a7040;
+    border: none;
+    color: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .wa-btn:hover { background: #145c34; }
+  .wa-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  .drawer-empty {
+    text-align: center; padding: 3rem 1rem;
+    color: var(--text-muted); font-size: 13px; line-height: 1.8;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 4rem;
+    padding: 2rem;
+    border-top: 0.5px solid var(--green-border);
+    text-align: center;
+    font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 0 1rem; }
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+    .filters { padding: 1rem 1rem; }
+    .grid-section { padding: 1.2rem 1rem; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card-name { font-size: 15px; }
+    .card-price { font-size: 13px; }
+    .add-btn { font-size: 9px; padding: 6px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    Zofèra
+    <span>American Diamond Jewelry</span>
+  </div>
+  <button class="cart-btn" id="cartToggle" aria-label="Open cart">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    Cart
+    <div class="cart-dot" id="cartDot">0</div>
+  </button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">✦ &nbsp; Kuwait City &nbsp; ✦</p>
+  <h1 class="hero-title">Crafted to Captivate</h1>
+  <p class="hero-sub">American diamond pieces — each one chosen for its light, its line, and the way it catches a room.</p>
+</section>
+
+<!-- FILTERS -->
+<nav class="filters" id="filters" aria-label="Filter by category">
+  <button class="filter-btn active" data-cat="all">All pieces</button>
+  <button class="filter-btn" data-cat="necklaces">Necklaces</button>
+  <button class="filter-btn" data-cat="pendant-sets">Pendant sets</button>
+  <button class="filter-btn" data-cat="earrings">Earrings</button>
+  <button class="filter-btn" data-cat="rings">Rings</button>
+  <button class="filter-btn" data-cat="bracelets">Bracelets</button>
+</nav>
+
+<!-- PRODUCT GRID -->
+<main class="grid-section">
+  <div class="product-grid" id="grid" aria-label="Jewelry products"></div>
+  <div class="empty" id="empty" style="display:none">No pieces in this category yet.</div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>Zofèra &nbsp;·&nbsp; American Diamond Jewelry &nbsp;·&nbsp; Kuwait City</div>
+  <div>Browse, add to cart, and send your order via WhatsApp — we'll confirm and deliver.</div>
+</footer>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <div class="drawer-title">Your selection</div>
+    <button class="close-btn" id="closeDrawer" aria-label="Close cart">×</button>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</aside>
+
+<script>
+/* =============================================
+   PRODUCTS — edit this list to add your pieces
+   =============================================
+   Each product needs:
+   - id:       unique number (1, 2, 3…)
+   - name:     product name
+   - cat:      one of: necklaces | pendant-sets | earrings | rings | bracelets
+   - price:    number (in KWD) — set to 0 to show "Price on request"
+   - desc:     short description (material, stone, etc.)
+   - image:    path to your photo, e.g. "images/necklace1.jpg"
+               leave as "" if no photo yet
+   ============================================= */
+const PRODUCTS = [
+  {
+    id: 1,
+    name: "Emerald drop pendant set",
+    cat: "pendant-sets",
+    price: 45,
+    desc: "American diamond & emerald crystal · Gold-tone finish",
+    image: ""
+  },
+  {
+    id: 2,
+    name: "Crescent collar necklace",
+    cat: "necklaces",
+    price: 38,
+    desc: "Pavé-set American diamonds · Silver-tone",
+    image: ""
+  },
+  {
+    id: 3,
+    name: "Leaf motif earrings",
+    cat: "earrings",
+    price: 22,
+    desc: "Drop style · Gold-tone with emerald accent",
+    image: ""
+  },
+  {
+    id: 4,
+    name: "Floral stud earrings",
+    cat: "earrings",
+    price: 18,
+    desc: "American diamond cluster · Rose gold finish",
+    image: ""
+  },
+  {
+    id: 5,
+    name: "Waterfall drop earrings",
+    cat: "earrings",
+    price: 28,
+    desc: "Long chandelier style · Silver & emerald",
+    image: ""
+  },
+  {
+    id: 6,
+    name: "Solitaire band ring",
+    cat: "rings",
+    price: 20,
+    desc: "Round-cut American diamond · Gold-tone band",
+    image: ""
+  },
+  {
+    id: 7,
+    name: "Tennis bracelet",
+    cat: "bracelets",
+    price: 55,
+    desc: "Full pavé American diamond line · Silver-tone",
+    image: ""
+  },
+  {
+    id: 8,
+    name: "Vine bangle",
+    cat: "bracelets",
+    price: 32,
+    desc: "Engraved motif · Gold-tone",
+    image: ""
+  }
+];
+
+/* =============================================
+   YOUR WHATSAPP NUMBER — replace with yours
+   ============================================= */
+const WA_NUMBER = "96566789571"; // no + or spaces
+
+/* ============================================= */
+
+let cart = {}; // { id: qty }
+let activeFilter = "all";
+
+const catLabels = {
+  "necklaces": "Necklace",
+  "pendant-sets": "Pendant set",
+  "earrings": "Earrings",
+  "rings": "Ring",
+  "bracelets": "Bracelet"
+};
+
+function formatPrice(p) {
+  if (!p || p === 0) return '<span style="color:var(--text-muted);font-size:12px">Price on request</span>';
+  return `<span>KWD</span>${p.toFixed(3)}`;
+}
+
+function imgOrPlaceholder(image, name) {
+  if (image) return `<img src="${image}" alt="${name}" loading="lazy">`;
+  return `<div class="img-placeholder">
+    <svg viewBox="0 0 24 24" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <span>Add photo</span>
+  </div>`;
+}
+
+function renderGrid() {
+  const grid = document.getElementById("grid");
+  const empty = document.getElementById("empty");
+  const list = activeFilter === "all"
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.cat === activeFilter);
+
+  if (list.length === 0) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  grid.innerHTML = list.map(p => {
+    const inCart = cart[p.id] || 0;
+    return `
+    <article class="product-card" data-id="${p.id}">
+      <div class="card-image">
+        ${imgOrPlaceholder(p.image, p.name)}
+        <div class="card-cat-badge">${catLabels[p.cat] || p.cat}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-footer">
+          <div class="card-price">${formatPrice(p.price)}</div>
+          <button class="add-btn ${inCart ? 'added' : ''}" data-id="${p.id}" aria-label="${inCart ? 'Added' : 'Add to cart'}: ${p.name}">
+            ${inCart ? `✦ In cart (${inCart})` : 'Add to cart'}
+          </button>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+
+  grid.querySelectorAll(".add-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = +btn.dataset.id;
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartDot();
+      renderGrid();
+      renderDrawer();
+    });
+  });
+}
+
+function updateCartDot() {
+  const total = Object.values(cart).reduce((a, b) => a + b, 0);
+  const dot = document.getElementById("cartDot");
+  dot.textContent = total;
+  dot.classList.toggle("visible", total > 0);
+}
+
+function renderDrawer() {
+  const items = Object.entries(cart)
+    .filter(([, qty]) => qty > 0)
+    .map(([id, qty]) => ({ ...PRODUCTS.find(p => p.id === +id), qty }));
+
+  const drawerItems = document.getElementById("drawerItems");
+  const drawerFoot = document.getElementById("drawerFoot");
+
+  if (items.length === 0) {
+    drawerItems.innerHTML = `<div class="drawer-empty">Your cart is empty.<br>Browse the collection and add pieces you love.</div>`;
+    drawerFoot.innerHTML = "";
+    return;
+  }
+
+  drawerItems.innerHTML = items.map(p => `
+    <div class="drawer-item">
+      <div class="drawer-item-img">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : `<div class="no-img">✦</div>`}
+      </div>
+      <div class="drawer-item-info">
+        <div class="drawer-item-name">${p.name}</div>
+        <div class="drawer-item-price">${p.price ? `KWD ${(p.price * p.qty).toFixed(3)}` : 'Price on request'}</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" data-id="${p.id}" data-action="minus" aria-label="Decrease quantity">−</button>
+        <div class="qty-num">${p.qty}</div>
+        <button class="qty-btn" data-id="${p.id}" data-action="plus" aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+  `).join("");
+
+  const totalKWD = items.filter(p => p.price).reduce((a, p) => a + p.price * p.qty, 0);
+  const hasPOR = items.some(p => !p.price);
+
+  drawerFoot.innerHTML = `
+    <div class="drawer-total">
+      <div class="drawer-total-label">Total</div>
+      <div class="drawer-total-val">${totalKWD > 0 ? `KWD ${totalKWD.toFixed(3)}` : ''}${hasPOR ? '<span style="font-size:12px;color:var(--text-muted)"> + enquiry items</span>' : ''}</div>
+    </div>
+    <div class="drawer-note">
+      No payment online — I'll confirm availability and arrange delivery after you send your order.
+    </div>
+    <button class="wa-btn" id="waBtn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Send order via WhatsApp
+    </button>`;
+
+  drawerItems.querySelectorAll(".qty-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = +btn.dataset.id;
+      if (btn.dataset.action === "plus") {
+        cart[id] = (cart[id] || 0) + 1;
+      } else {
+        cart[id] = (cart[id] || 1) - 1;
+        if (cart[id] <= 0) delete cart[id];
+      }
+      updateCartDot();
+      renderDrawer();
+      renderGrid();
+    });
+  });
+
+  document.getElementById("waBtn").addEventListener("click", () => {
+    const lines = items.map(p =>
+      `• ${p.name} × ${p.qty}${p.price ? ` — KWD ${(p.price * p.qty).toFixed(3)}` : ' (price enquiry)'}`
+    ).join("\n");
+    const msg = `Hello Zofèra! 💎\n\nI'd like to order:\n\n${lines}\n\n${totalKWD > 0 ? `Total: KWD ${totalKWD.toFixed(3)}\n\n` : ''}Please confirm availability and delivery. Thank you!`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+  });
+}
+
+function openDrawer() {
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("overlay").classList.add("open");
+  renderDrawer();
+}
+function closeDrawer() {
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
+}
+
+document.getElementById("cartToggle").addEventListener("click", openDrawer);
+document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
+document.getElementById("overlay").addEventListener("click", closeDrawer);
+
+document.getElementById("filters").addEventListener("click", e => {
+  const btn = e.target.closest(".filter-btn");
+  if (!btn) return;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  activeFilter = btn.dataset.cat;
+  renderGrid();
+});
+
+renderGrid();
+</script>
+</body>
+</html>
