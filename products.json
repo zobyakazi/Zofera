@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Rose Bath Bomb",
+    "price": "5 KWD",
+    "image": "images/rose.jpg"
+  },
+  {
+    "name": "Lemon Bath Bomb",
+    "price": "4 KWD",
+    "image": "images/lemon.jpg"
+  }
+]
