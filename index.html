@@ -4,21 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zofèra | American Diamond Jewelry</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --green-deep: #0d1f17;
-    --green-mid:  #14281e;
-    --green-card: #172b20;
-    --green-border: #2a4535;
-    --green-hover: #1e3829;
+    --green-deep: #0a0a0a;
+    --green-mid:  #111111;
+    --green-card: #161616;
+    --green-border: #2a2a2a;
+    --green-hover: #1e1e1e;
     --gold:       #c9a84c;
     --gold-light: #e2c97e;
     --gold-pale:  #f5e9c4;
-    --cream:      #f7f1e3;
-    --text-muted: #8aab96;
+    --cream:      #f0ece4;
+    --text-muted: #777770;
     --white:      #ffffff;
   }
 
@@ -39,25 +39,15 @@
     border-bottom: 0.5px solid var(--green-border);
     padding: 0 2rem;
     display: flex; align-items: center; justify-content: space-between;
-    height: 64px;
+    height: 68px;
   }
 
   .logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 400; font-style: italic;
-    color: var(--gold-light);
-    letter-spacing: 0.04em;
-    line-height: 1;
-  }
-
-  .logo span {
-    display: block;
-    font-family: 'Jost', sans-serif;
-    font-size: 9px; font-style: normal; font-weight: 400;
-    letter-spacing: 0.22em;
-    color: var(--text-muted);
+    font-family: 'Bodoni Moda', serif;
+    font-size: 18px; font-weight: 300;
+    color: #ffffff;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    margin-top: 3px;
   }
 
   .cart-btn {
@@ -89,45 +79,41 @@
   /* ── HERO ── */
   .hero {
     text-align: center;
-    padding: 5rem 2rem 4rem;
+    padding: 5rem 2rem 4.5rem;
     border-bottom: 0.5px solid var(--green-border);
     position: relative;
-    overflow: hidden;
   }
 
-  .hero::before {
-    content: '✦';
-    position: absolute;
-    font-size: 300px;
-    color: rgba(201,168,76,0.03);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
+  .hero-logo {
+    font-family: 'Bodoni Moda', serif;
+    font-size: clamp(56px, 13vw, 110px);
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #ffffff;
     line-height: 1;
+    margin-bottom: 2rem;
   }
 
-  .hero-eyebrow {
-    font-size: 10px; font-weight: 400;
-    letter-spacing: 0.3em; text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.2rem;
+  .hero-divider {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-bottom: 1.4rem;
   }
-
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(38px, 7vw, 64px);
-    font-weight: 300; font-style: italic;
-    color: var(--gold-light);
-    line-height: 1.1;
-    margin-bottom: 1rem;
+  .hero-divider::before, .hero-divider::after {
+    content: '';
+    display: block; width: 48px; height: 0.5px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+  .hero-divider span {
+    font-size: 10px; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase;
   }
 
   .hero-sub {
-    font-size: 13px; font-weight: 300;
+    font-size: 12px; font-weight: 300;
     color: var(--text-muted);
-    letter-spacing: 0.08em;
-    max-width: 360px; margin: 0 auto;
-    line-height: 1.8;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    line-height: 2;
   }
 
   /* ── FILTERS ── */
@@ -204,13 +190,13 @@
     color: var(--green-border);
     font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
   }
-  .card-image .img-placeholder svg { width: 36px; height: 36px; stroke: var(--green-border); fill: none; }
+  .card-image .img-placeholder svg { width: 36px; height: 36px; stroke: #333; fill: none; }
 
   .card-cat-badge {
     position: absolute; top: 10px; left: 10px;
     font-size: 9px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase;
     color: var(--gold);
-    background: rgba(13,31,23,0.85);
+    background: rgba(5,5,5,0.85);
     padding: 3px 9px;
     border: 0.5px solid rgba(201,168,76,0.3);
     border-radius: 2px;
@@ -219,8 +205,8 @@
   .card-body { padding: 14px 16px 16px; }
 
   .card-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px; font-weight: 400;
+    font-family: 'Bodoni Moda', serif;
+    font-size: 16px; font-weight: 300;
     color: var(--cream);
     line-height: 1.3;
     margin-bottom: 4px;
@@ -299,7 +285,7 @@
   }
 
   .drawer-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Bodoni Moda', serif;
     font-size: 20px; font-style: italic; font-weight: 400;
     color: var(--gold-light);
   }
@@ -369,7 +355,7 @@
     margin-bottom: 1rem;
   }
   .drawer-total-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
-  .drawer-total-val { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold-light); }
+  .drawer-total-val { font-family: 'Bodoni Moda', serif; font-size: 22px; color: var(--gold-light); }
 
   .drawer-note {
     font-size: 11px; color: var(--text-muted);
@@ -415,7 +401,9 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     header { padding: 0 1rem; }
+    .logo img { height: 26px; }
     .hero { padding: 3rem 1.5rem 2.5rem; }
+    .hero-logo { height: 44px; }
     .filters { padding: 1rem 1rem; }
     .grid-section { padding: 1.2rem 1rem; }
     .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -429,10 +417,7 @@
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
-    Zofèra
-    <span>American Diamond Jewelry</span>
-  </div>
+  <div class="logo">Zofèra</div>
   <button class="cart-btn" id="cartToggle" aria-label="Open cart">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
@@ -444,9 +429,9 @@
 
 <!-- HERO -->
 <section class="hero">
-  <p class="hero-eyebrow">✦ &nbsp; Kuwait City &nbsp; ✦</p>
-  <h1 class="hero-title">Crafted to Captivate</h1>
-  <p class="hero-sub">American diamond pieces — each one chosen for its light, its line, and the way it catches a room.</p>
+  <h1 class="hero-logo">Zofèra</h1>
+  <div class="hero-divider"><span>American Diamond Jewelry</span></div>
+  <p class="hero-sub">Kuwait City &nbsp;·&nbsp; Browse & order via WhatsApp</p>
 </section>
 
 <!-- FILTERS -->
@@ -468,7 +453,7 @@
 <!-- FOOTER -->
 <footer>
   <div>Zofèra &nbsp;·&nbsp; American Diamond Jewelry &nbsp;·&nbsp; Kuwait City</div>
-  <div>Browse, add to cart, and send your order via WhatsApp — we'll confirm and deliver.</div>
+  <div>Browse, add to cart, and send your order via WhatsApp.</div>
 </footer>
 
 <!-- CART OVERLAY + DRAWER -->
@@ -484,83 +469,28 @@
 
 <script>
 /* =============================================
-   PRODUCTS — edit this list to add your pieces
-   =============================================
-   Each product needs:
-   - id:       unique number (1, 2, 3…)
-   - name:     product name
-   - cat:      one of: necklaces | pendant-sets | earrings | rings | bracelets
-   - price:    number (in KWD) — set to 0 to show "Price on request"
-   - desc:     short description (material, stone, etc.)
-   - image:    path to your photo, e.g. "images/necklace1.jpg"
-               leave as "" if no photo yet
+   PRODUCTS — managed via admin.html
+   Do not edit this directly; use admin.html instead.
    ============================================= */
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Emerald drop pendant set",
-    cat: "pendant-sets",
-    price: 45,
-    desc: "American diamond & emerald crystal · Gold-tone finish",
-    image: ""
-  },
-  {
-    id: 2,
-    name: "Crescent collar necklace",
-    cat: "necklaces",
-    price: 38,
-    desc: "Pavé-set American diamonds · Silver-tone",
-    image: ""
-  },
-  {
-    id: 3,
-    name: "Leaf motif earrings",
-    cat: "earrings",
-    price: 22,
-    desc: "Drop style · Gold-tone with emerald accent",
-    image: ""
-  },
-  {
-    id: 4,
-    name: "Floral stud earrings",
-    cat: "earrings",
-    price: 18,
-    desc: "American diamond cluster · Rose gold finish",
-    image: ""
-  },
-  {
-    id: 5,
-    name: "Waterfall drop earrings",
-    cat: "earrings",
-    price: 28,
-    desc: "Long chandelier style · Silver & emerald",
-    image: ""
-  },
-  {
-    id: 6,
-    name: "Solitaire band ring",
-    cat: "rings",
-    price: 20,
-    desc: "Round-cut American diamond · Gold-tone band",
-    image: ""
-  },
-  {
-    id: 7,
-    name: "Tennis bracelet",
-    cat: "bracelets",
-    price: 55,
-    desc: "Full pavé American diamond line · Silver-tone",
-    image: ""
-  },
-  {
-    id: 8,
-    name: "Vine bangle",
-    cat: "bracelets",
-    price: 32,
-    desc: "Engraved motif · Gold-tone",
-    image: ""
-  }
+const DEFAULT_PRODUCTS = [
+  { id:1, name:"Emerald drop pendant set", cat:"pendant-sets", price:45, desc:"American diamond & emerald crystal · Gold-tone finish", image:"" },
+  { id:2, name:"Crescent collar necklace", cat:"necklaces", price:38, desc:"Pavé-set American diamonds · Silver-tone", image:"" },
+  { id:3, name:"Leaf motif earrings", cat:"earrings", price:22, desc:"Drop style · Gold-tone with emerald accent", image:"" },
+  { id:4, name:"Floral stud earrings", cat:"earrings", price:18, desc:"American diamond cluster · Rose gold finish", image:"" },
+  { id:5, name:"Waterfall drop earrings", cat:"earrings", price:28, desc:"Long chandelier style · Silver & emerald", image:"" },
+  { id:6, name:"Solitaire band ring", cat:"rings", price:20, desc:"Round-cut American diamond · Gold-tone band", image:"" },
+  { id:7, name:"Tennis bracelet", cat:"bracelets", price:55, desc:"Full pavé American diamond line · Silver-tone", image:"" },
+  { id:8, name:"Vine bangle", cat:"bracelets", price:32, desc:"Engraved motif · Gold-tone", image:"" }
 ];
+
+function loadProducts() {
+  try {
+    const saved = localStorage.getItem('zofera_products');
+    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
+  } catch(e) { return DEFAULT_PRODUCTS; }
+}
+
+let PRODUCTS = loadProducts();
 
 /* =============================================
    YOUR WHATSAPP NUMBER — replace with yours
