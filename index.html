@@ -398,7 +398,122 @@
     line-height: 2;
   }
 
-  /* ── RESPONSIVE ── */
+  /* ── PRODUCT DETAIL SHEET ── */
+  .sheet-bg {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 300;
+  }
+  .sheet-bg.open { display: block; }
+
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: -100%;
+    max-height: 92vh;
+    background: var(--green-mid);
+    border-top: 0.5px solid var(--green-border);
+    border-radius: 16px 16px 0 0;
+    z-index: 301;
+    display: flex; flex-direction: column;
+    transition: bottom 0.35s cubic-bezier(0.32,0.72,0,1);
+    overflow: hidden;
+  }
+  .sheet.open { bottom: 0; }
+
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: var(--green-border);
+    border-radius: 2px;
+    margin: 12px auto 0;
+    flex-shrink: 0;
+  }
+
+  .sheet-scroll { overflow-y: auto; flex: 1; }
+
+  .sheet-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 55vw;
+    object-fit: cover;
+    display: block;
+    background: var(--green-card);
+  }
+
+  .sheet-img-placeholder {
+    width: 100%; aspect-ratio: 1/1; max-height: 55vw;
+    background: var(--green-card);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green-border); font-size: 48px;
+  }
+
+  /* pinch-zoom wrapper */
+  .sheet-img-wrap {
+    overflow: hidden;
+    position: relative;
+    touch-action: pinch-zoom;
+  }
+  .sheet-img-wrap img {
+    width: 100%; display: block;
+    transition: transform 0.1s;
+    transform-origin: center center;
+  }
+
+  .sheet-body { padding: 1.4rem 1.4rem 0.5rem; }
+
+  .sheet-badge {
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+
+  .sheet-name {
+    font-family: 'Bodoni Moda', serif;
+    font-size: clamp(22px, 5vw, 30px); font-weight: 300;
+    color: var(--cream); line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .sheet-desc {
+    font-size: 13px; color: var(--text-muted);
+    line-height: 1.8; margin-bottom: 1.2rem;
+  }
+
+  .sheet-price {
+    font-size: 20px; color: var(--gold-light);
+    margin-bottom: 1.4rem;
+  }
+  .sheet-price span { font-size: 12px; color: var(--text-muted); margin-right: 3px; }
+
+  .sheet-foot {
+    padding: 1rem 1.4rem 1.6rem;
+    display: flex; gap: 10px;
+    border-top: 0.5px solid var(--green-border);
+    background: var(--green-mid);
+    flex-shrink: 0;
+  }
+
+  .sheet-close {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: transparent;
+    border: 0.5px solid var(--green-border);
+    color: var(--text-muted); font-size: 20px;
+    border-radius: 2px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .sheet-close:hover { border-color: var(--gold); color: var(--cream); }
+
+  .sheet-add {
+    flex: 1; height: 44px;
+    background: transparent;
+    border: 0.5px solid var(--gold);
+    color: var(--gold-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase;
+    border-radius: 2px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sheet-add:hover, .sheet-add.added { background: rgba(201,168,76,0.12); }
+  .sheet-add.added { border-color: var(--gold-light); }
+
   @media (max-width: 600px) {
     header { padding: 0 1rem; }
     .logo img { height: 26px; }
@@ -410,6 +525,7 @@
     .card-name { font-size: 15px; }
     .card-price { font-size: 13px; }
     .add-btn { font-size: 9px; padding: 6px 10px; }
+    .sheet-img { max-height: 70vw; }
   }
 </style>
 </head>
@@ -431,7 +547,7 @@
 <section class="hero">
   <h1 class="hero-logo">Zofèra</h1>
   <div class="hero-divider"><span>American Diamond Jewelry</span></div>
-  <p class="hero-sub">Kuwait City &nbsp;·&nbsp; Browse & order via WhatsApp</p>
+  <p class="hero-sub">Browse & order via WhatsApp</p>
 </section>
 
 <!-- FILTERS -->
@@ -452,11 +568,25 @@
 
 <!-- FOOTER -->
 <footer>
-  <div>Zofèra &nbsp;·&nbsp; American Diamond Jewelry &nbsp;·&nbsp; Kuwait City</div>
+  <div>Zofèra &nbsp;·&nbsp; American Diamond Jewelry</div>
   <div>Browse, add to cart, and send your order via WhatsApp.</div>
 </footer>
 
-<!-- CART OVERLAY + DRAWER -->
+<!-- PRODUCT DETAIL SHEET -->
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" aria-label="Product detail">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll" id="sheetScroll">
+    <div class="sheet-img-wrap" id="sheetImgWrap"></div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+  <div class="sheet-foot">
+    <button class="sheet-close" id="sheetClose" aria-label="Close">×</button>
+    <button class="sheet-add" id="sheetAddBtn">Add to cart</button>
+  </div>
+</div>
+
+
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Shopping cart">
   <div class="drawer-head">
@@ -540,7 +670,7 @@ function renderGrid() {
   grid.innerHTML = list.map(p => {
     const inCart = cart[p.id] || 0;
     return `
-    <article class="product-card" data-id="${p.id}">
+    <article class="product-card" data-id="${p.id}" style="cursor:pointer">
       <div class="card-image">
         ${imgOrPlaceholder(p.image, p.name)}
         <div class="card-cat-badge">${catLabels[p.cat] || p.cat}</div>
@@ -558,8 +688,16 @@ function renderGrid() {
     </article>`;
   }).join("");
 
+  grid.querySelectorAll(".product-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".add-btn")) return;
+      openSheet(+card.dataset.id);
+    });
+  });
+
   grid.querySelectorAll(".add-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
       const id = +btn.dataset.id;
       cart[id] = (cart[id] || 0) + 1;
       updateCartDot();
@@ -668,6 +806,57 @@ document.getElementById("filters").addEventListener("click", e => {
   btn.classList.add("active");
   activeFilter = btn.dataset.cat;
   renderGrid();
+});
+
+/* ── PRODUCT DETAIL SHEET ── */
+let sheetProductId = null;
+
+function openSheet(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  sheetProductId = id;
+
+  const imgWrap = document.getElementById("sheetImgWrap");
+  imgWrap.innerHTML = p.image
+    ? `<img src="${p.image}" alt="${p.name}" style="width:100%;display:block">`
+    : `<div class="sheet-img-placeholder">✦</div>`;
+
+  document.getElementById("sheetBody").innerHTML = `
+    <div class="sheet-badge">${catLabels[p.cat] || p.cat}</div>
+    <div class="sheet-name">${p.name}</div>
+    <div class="sheet-desc">${p.desc || ''}</div>
+    <div class="sheet-price">${p.price ? `<span>KWD</span>${p.price.toFixed(3)}` : '<span style="font-size:13px;color:var(--text-muted)">Price on request</span>'}</div>
+  `;
+
+  updateSheetBtn();
+  document.getElementById("sheetBg").classList.add("open");
+  document.getElementById("sheet").classList.add("open");
+  document.getElementById("sheetScroll").scrollTop = 0;
+}
+
+function updateSheetBtn() {
+  const btn = document.getElementById("sheetAddBtn");
+  const inCart = cart[sheetProductId] || 0;
+  btn.textContent = inCart ? `✦ In cart (${inCart})` : 'Add to cart';
+  btn.className = 'sheet-add' + (inCart ? ' added' : '');
+}
+
+function closeSheet() {
+  document.getElementById("sheetBg").classList.remove("open");
+  document.getElementById("sheet").classList.remove("open");
+  sheetProductId = null;
+}
+
+document.getElementById("sheetClose").addEventListener("click", closeSheet);
+document.getElementById("sheetBg").addEventListener("click", closeSheet);
+
+document.getElementById("sheetAddBtn").addEventListener("click", () => {
+  if (!sheetProductId) return;
+  cart[sheetProductId] = (cart[sheetProductId] || 0) + 1;
+  updateCartDot();
+  updateSheetBtn();
+  renderGrid();
+  renderDrawer();
 });
 
 renderGrid();
