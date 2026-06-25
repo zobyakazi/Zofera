@@ -7,10 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg:#0a0a0a; --surface:#111; --card:#161616; --border:#2a2a2a; --border2:#3a3a3a;
-    --gold:#c9a84c; --gold-l:#e2c97e; --cream:#f0ece4; --muted:#666660; --danger:#c0392b;
-  }
+  :root { --bg:#0a0a0a; --surface:#111; --card:#161616; --border:#2a2a2a; --border2:#3a3a3a; --gold:#c9a84c; --gold-l:#e2c97e; --cream:#f0ece4; --muted:#666660; }
   body { background:var(--bg); color:var(--cream); font-family:'Jost',sans-serif; font-weight:300; min-height:100vh; }
   header { background:var(--bg); border-bottom:.5px solid var(--border); padding:0 2rem; height:64px; display:flex; align-items:center; justify-content:space-between; }
   .logo { font-family:'Bodoni Moda',serif; font-size:16px; font-weight:300; color:#fff; letter-spacing:.28em; text-transform:uppercase; }
@@ -144,15 +141,14 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-const GITHUB_TOKEN = "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";
-const GITHUB_REPO  = "zobyakazi/Zofera";
-const FILE_PATH    = "products.json";
-const API_BASE     = `https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`;
+const GITHUB_TOKEN = "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";
+const GITHUB_USER = "zobyakazi";
+const GITHUB_REPO = "Zofera";
+const FILE_PATH = "products.json";
+const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+const RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${FILE_PATH}`;
 
-const CAT_LABELS = {
-  "necklaces":"Necklaces","pendant-sets":"Pendant sets",
-  "earrings":"Earrings","rings":"Rings","bracelets":"Bracelets"
-};
+const CAT_LABELS = { "necklaces":"Necklaces", "pendant-sets":"Pendant sets", "earrings":"Earrings", "rings":"Rings", "bracelets":"Bracelets" };
 
 let products = [];
 let fileSha = null;
@@ -163,145 +159,179 @@ function showSaving(on) { document.getElementById("savingBar").classList.toggle(
 
 function toast(msg, isError=false) {
   const t = document.getElementById("toast");
-  t.textContent = msg; t.className = "toast" + (isError?" error":"") + " show";
-  setTimeout(()=>t.classList.remove("show"), 2500);
+  t.textContent = msg;
+  t.className = "toast" + (isError ? " error" : "") + " show";
+  setTimeout(() => t.classList.remove("show"), 2500);
 }
 
 async function fetchProducts() {
   try {
-    const res = await fetch(API_BASE, { headers:{ Authorization:`token ${GITHUB_TOKEN}`, Accept:"application/vnd.github.v3+json" }});
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    fileSha = data.sha;
-    products = JSON.parse(atob(data.content.replace(/\n/g,""))) || [];
-  } catch(e) { products = []; toast("Could not load products — check your token", true); }
+    const res = await fetch(RAW_URL);
+    if (!res.ok) { products = []; render(); return; }
+    products = await res.json();
+    if (!Array.isArray(products)) products = [];
+    
+    const metaRes = await fetch(API_URL, { headers: { Authorization: `token ${GITHUB_TOKEN}` } });
+    if (metaRes.ok) {
+      const metaData = await metaRes.json();
+      fileSha = metaData.sha;
+    }
+  } catch(e) { products = []; }
   render();
 }
 
 async function saveProducts() {
   showSaving(true);
   try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))));
-    const body = { message:"Update products", content, sha:fileSha };
-    const res = await fetch(API_BASE, { method:"PUT", headers:{ Authorization:`token ${GITHUB_TOKEN}`, Accept:"application/vnd.github.v3+json", "Content-Type":"application/json" }, body:JSON.stringify(body) });
-    if (!res.ok) throw new Error();
+    const content = btoa(JSON.stringify(products, null, 2));
+    const body = { message: "Update products via admin", content, sha: fileSha };
+    
+    const res = await fetch(API_URL, {
+      method: "PUT",
+      headers: { Authorization: `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    
+    if (!res.ok) throw new Error("GitHub API error");
     const data = await res.json();
     fileSha = data.content.sha;
     showSaving(false);
     return true;
-  } catch(e) { showSaving(false); toast("Save failed — check your token", true); return false; }
+  } catch(e) {
+    showSaving(false);
+    toast("Save failed — try again", true);
+    return false;
+  }
 }
 
-function nextId() { return products.length ? Math.max(...products.map(p=>p.id))+1 : 1; }
+function nextId() { return products.length ? Math.max(...products.map(p => p.id)) + 1 : 1; }
 
 function renderStats() {
   const counts = {};
-  Object.keys(CAT_LABELS).forEach(c=>counts[c]=0);
-  products.forEach(p=>{ if(counts[p.cat]!==undefined) counts[p.cat]++; });
+  Object.keys(CAT_LABELS).forEach(c => counts[c] = 0);
+  products.forEach(p => { if(counts[p.cat] !== undefined) counts[p.cat]++; });
   document.getElementById("statsBar").innerHTML =
     `<div class="stat"><strong>${products.length}</strong>Total pieces</div>` +
-    Object.entries(CAT_LABELS).map(([k,v])=>`<div class="stat"><strong>${counts[k]}</strong>${v}</div>`).join("");
+    Object.entries(CAT_LABELS).map(([k,v]) => `<div class="stat"><strong>${counts[k]}</strong>${v}</div>`).join("");
 }
 
 function renderList() {
-  const list = listFilter==="all" ? products : products.filter(p=>p.cat===listFilter);
+  const list = listFilter === "all" ? products : products.filter(p => p.cat === listFilter);
   const el = document.getElementById("productList");
-  if(!list.length){ el.innerHTML=`<div class="empty-list">No products here yet.</div>`; return; }
-  el.innerHTML = list.map(p=>`
+  if(!list.length) { el.innerHTML = `<div class="empty-list">No products here yet.</div>`; return; }
+  el.innerHTML = list.map(p => `
     <div class="product-row">
-      <div class="row-img">${p.image?`<img src="images/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='📷'">`:"📷"}</div>
+      <div class="row-img">${p.image ? `<img src="images/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='📷'">` : "📷"}</div>
       <div class="row-info">
         <div class="row-name">${p.name}</div>
-        <div class="row-meta">${CAT_LABELS[p.cat]||p.cat}${p.desc?" · "+p.desc:""}</div>
+        <div class="row-meta">${CAT_LABELS[p.cat] || p.cat}${p.desc ? " · " + p.desc : ""}</div>
       </div>
-      <div class="row-price">${p.price?"KWD "+p.price.toFixed(3):"On request"}</div>
+      <div class="row-price">${p.price ? "KWD " + p.price.toFixed(3) : "On request"}</div>
       <div class="row-actions">
         <button class="btn-edit" data-id="${p.id}">Edit</button>
         <button class="btn-del" data-id="${p.id}" title="Delete">✕</button>
       </div>
     </div>`).join("");
-  el.querySelectorAll(".btn-edit").forEach(b=>b.addEventListener("click",()=>openEdit(+b.dataset.id)));
-  el.querySelectorAll(".btn-del").forEach(b=>b.addEventListener("click",()=>deleteProduct(+b.dataset.id)));
+  el.querySelectorAll(".btn-edit").forEach(b => b.addEventListener("click", () => openEdit(+b.dataset.id)));
+  el.querySelectorAll(".btn-del").forEach(b => b.addEventListener("click", () => deleteProduct(+b.dataset.id)));
 }
 
 function render() { renderStats(); renderList(); }
 
-document.getElementById("addBtn").addEventListener("click", async()=>{
+document.getElementById("addBtn").addEventListener("click", async () => {
   const name = document.getElementById("f-name").value.trim();
-  if(!name){ toast("Please enter a product name",true); return; }
+  if(!name) { toast("Please enter a product name", true); return; }
   const btn = document.getElementById("addBtn");
-  btn.disabled=true; btn.textContent="Saving...";
-  const p = { id:nextId(), name, cat:document.getElementById("f-cat").value, price:parseFloat(document.getElementById("f-price").value)||0, desc:document.getElementById("f-desc").value.trim(), image:document.getElementById("f-image").value.trim() };
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+  const p = {
+    id: nextId(),
+    name,
+    cat: document.getElementById("f-cat").value,
+    price: parseFloat(document.getElementById("f-price").value) || 0,
+    desc: document.getElementById("f-desc").value.trim(),
+    image: document.getElementById("f-image").value.trim()
+  };
   products.push(p);
   const ok = await saveProducts();
-  btn.disabled=false; btn.textContent="Add product";
-  if(ok){ render(); clearForm(); toast("✦ Product added — live on store!"); }
+  btn.disabled = false;
+  btn.textContent = "Add product";
+  if(ok) { render(); clearForm(); toast("✦ Product added — live on store!"); }
   else products.pop();
 });
 
 document.getElementById("clearBtn").addEventListener("click", clearForm);
-function clearForm(){
-  ["f-name","f-price","f-desc","f-image"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("f-cat").value="necklaces";
-  document.getElementById("f-preview").style.display="none";
+
+function clearForm() {
+  ["f-name","f-price","f-desc","f-image"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("f-cat").value = "necklaces";
+  document.getElementById("f-preview").style.display = "none";
 }
 
-document.getElementById("f-image").addEventListener("input",function(){
-  const prev=document.getElementById("f-preview");
-  if(this.value.trim()){ prev.src="images/"+this.value.trim(); prev.style.display="block"; prev.onerror=()=>prev.style.display="none"; }
-  else prev.style.display="none";
+document.getElementById("f-image").addEventListener("input", function() {
+  const prev = document.getElementById("f-preview");
+  if(this.value.trim()) { prev.src = "images/" + this.value.trim(); prev.style.display = "block"; prev.onerror = () => prev.style.display = "none"; }
+  else prev.style.display = "none";
 });
 
-document.getElementById("listFilters").addEventListener("click",e=>{
-  const btn=e.target.closest(".lf-btn"); if(!btn)return;
-  document.querySelectorAll(".lf-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active"); listFilter=btn.dataset.cat; renderList();
+document.getElementById("listFilters").addEventListener("click", e => {
+  const btn = e.target.closest(".lf-btn");
+  if(!btn) return;
+  document.querySelectorAll(".lf-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  listFilter = btn.dataset.cat;
+  renderList();
 });
 
-async function deleteProduct(id){
-  if(!confirm("Remove this product from your store?"))return;
-  const prev=[...products]; products=products.filter(p=>p.id!==id);
-  const ok=await saveProducts();
-  if(ok){ render(); toast("Product removed"); }
-  else{ products=prev; render(); }
+async function deleteProduct(id) {
+  if(!confirm("Remove this product from your store?")) return;
+  const prev = [...products];
+  products = products.filter(p => p.id !== id);
+  const ok = await saveProducts();
+  if(ok) { render(); toast("Product removed"); }
+  else { products = prev; render(); }
 }
 
-function openEdit(id){
-  const p=products.find(x=>x.id===id); if(!p)return;
-  editingId=id;
-  document.getElementById("e-name").value=p.name;
-  document.getElementById("e-cat").value=p.cat;
-  document.getElementById("e-price").value=p.price||"";
-  document.getElementById("e-desc").value=p.desc||"";
-  document.getElementById("e-image").value=p.image||"";
-  const prev=document.getElementById("e-preview");
-  if(p.image){ prev.src="images/"+p.image; prev.style.display="block"; prev.onerror=()=>prev.style.display="none"; }
-  else prev.style.display="none";
+function openEdit(id) {
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById("e-name").value = p.name;
+  document.getElementById("e-cat").value = p.cat;
+  document.getElementById("e-price").value = p.price || "";
+  document.getElementById("e-desc").value = p.desc || "";
+  document.getElementById("e-image").value = p.image || "";
+  const prev = document.getElementById("e-preview");
+  if(p.image) { prev.src = "images/" + p.image; prev.style.display = "block"; prev.onerror = () => prev.style.display = "none"; }
+  else prev.style.display = "none";
   document.getElementById("modalBg").classList.add("open");
 }
 
-document.getElementById("e-image").addEventListener("input",function(){
-  const prev=document.getElementById("e-preview");
-  if(this.value.trim()){ prev.src="images/"+this.value.trim(); prev.style.display="block"; prev.onerror=()=>prev.style.display="none"; }
-  else prev.style.display="none";
+document.getElementById("e-image").addEventListener("input", function() {
+  const prev = document.getElementById("e-preview");
+  if(this.value.trim()) { prev.src = "images/" + this.value.trim(); prev.style.display = "block"; prev.onerror = () => prev.style.display = "none"; }
+  else prev.style.display = "none";
 });
 
-document.getElementById("saveEditBtn").addEventListener("click",async()=>{
-  const name=document.getElementById("e-name").value.trim();
-  if(!name){ toast("Name cannot be empty",true); return; }
-  const btn=document.getElementById("saveEditBtn");
-  btn.disabled=true; btn.textContent="Saving...";
-  const prev=[...products];
-  products=products.map(p=>p.id===editingId?{...p,name,cat:document.getElementById("e-cat").value,price:parseFloat(document.getElementById("e-price").value)||0,desc:document.getElementById("e-desc").value.trim(),image:document.getElementById("e-image").value.trim()}:p);
-  const ok=await saveProducts();
-  btn.disabled=false; btn.textContent="Save changes";
-  if(ok){ render(); closeModal(); toast("✦ Changes saved — live on store!"); }
-  else{ products=prev; render(); }
+document.getElementById("saveEditBtn").addEventListener("click", async () => {
+  const name = document.getElementById("e-name").value.trim();
+  if(!name) { toast("Name cannot be empty", true); return; }
+  const btn = document.getElementById("saveEditBtn");
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+  const prev = [...products];
+  products = products.map(p => p.id === editingId ? {...p,name,cat:document.getElementById("e-cat").value,price:parseFloat(document.getElementById("e-price").value)||0,desc:document.getElementById("e-desc").value.trim(),image:document.getElementById("e-image").value.trim()} : p);
+  const ok = await saveProducts();
+  btn.disabled = false;
+  btn.textContent = "Save changes";
+  if(ok) { render(); closeModal(); toast("✦ Changes saved — live on store!"); }
+  else { products = prev; render(); }
 });
 
-document.getElementById("cancelEditBtn").addEventListener("click",closeModal);
-document.getElementById("modalBg").addEventListener("click",e=>{ if(e.target===e.currentTarget)closeModal(); });
-function closeModal(){ document.getElementById("modalBg").classList.remove("open"); editingId=null; }
+document.getElementById("cancelEditBtn").addEventListener("click", closeModal);
+document.getElementById("modalBg").addEventListener("click", e => { if(e.target === e.currentTarget) closeModal(); });
+
+function closeModal() { document.getElementById("modalBg").classList.remove("open"); editingId = null; }
 
 fetchProducts();
 </script>
