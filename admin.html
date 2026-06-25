@@ -7,285 +7,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg:       #0a0a0a;
-    --surface:  #111111;
-    --card:     #161616;
-    --border:   #2a2a2a;
-    --border2:  #3a3a3a;
-    --gold:     #c9a84c;
-    --gold-l:   #e2c97e;
-    --cream:    #f0ece4;
-    --muted:    #666660;
-    --danger:   #c0392b;
+    --bg:#0a0a0a; --surface:#111; --card:#161616; --border:#2a2a2a; --border2:#3a3a3a;
+    --gold:#c9a84c; --gold-l:#e2c97e; --cream:#f0ece4; --muted:#666660; --danger:#c0392b;
   }
-
-  body {
-    background: var(--bg);
-    color: var(--cream);
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  header {
-    background: var(--bg);
-    border-bottom: 0.5px solid var(--border);
-    padding: 0 2rem;
-    height: 64px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .logo {
-    font-family: 'Bodoni Moda', serif;
-    font-size: 16px; font-weight: 300;
-    color: #fff; letter-spacing: 0.28em; text-transform: uppercase;
-  }
-  .logo span {
-    font-family: 'Jost', sans-serif;
-    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); margin-left: 12px; font-weight: 300;
-  }
-  .view-site {
-    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--gold); text-decoration: none;
-    border: 0.5px solid var(--border2);
-    padding: 7px 16px; border-radius: 2px;
-    transition: border-color 0.2s;
-  }
-  .view-site:hover { border-color: var(--gold); }
-
-  /* LAYOUT */
-  .page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
-  .section-title {
-    font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 1.2rem;
-  }
-
-  /* ADD FORM */
-  .form-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 4px;
-    padding: 1.6rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-  .form-grid .full { grid-column: 1 / -1; }
-
-  label {
-    display: block;
-    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 6px;
-  }
-
-  input, select, textarea {
-    width: 100%;
-    background: var(--card);
-    border: 0.5px solid var(--border);
-    color: var(--cream);
-    font-family: 'Jost', sans-serif;
-    font-size: 13px; font-weight: 300;
-    padding: 10px 12px;
-    border-radius: 2px;
-    outline: none;
-    transition: border-color 0.2s;
-    appearance: none;
-  }
-  input:focus, select:focus, textarea:focus { border-color: var(--gold); }
-  input::placeholder, textarea::placeholder { color: var(--muted); }
-  textarea { resize: vertical; min-height: 70px; }
-
-  select option { background: #1a1a1a; }
-
-  .img-hint {
-    font-size: 11px; color: var(--muted);
-    margin-top: 5px; line-height: 1.6;
-  }
-
-  .img-preview {
-    width: 60px; height: 60px;
-    border-radius: 3px;
-    border: 0.5px solid var(--border);
-    background: var(--card);
-    object-fit: cover;
-    margin-top: 8px;
-    display: none;
-  }
-
-  .form-actions { display: flex; gap: 10px; margin-top: 18px; }
-
-  .btn-primary {
-    background: var(--gold);
-    color: #0a0a0a;
-    border: none;
-    font-family: 'Jost', sans-serif;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
-    padding: 11px 24px; border-radius: 2px;
-    cursor: pointer; transition: background 0.2s;
-  }
-  .btn-primary:hover { background: var(--gold-l); }
-
-  .btn-ghost {
-    background: transparent;
-    border: 0.5px solid var(--border);
-    color: var(--muted);
-    font-family: 'Jost', sans-serif;
-    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-    padding: 11px 20px; border-radius: 2px;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .btn-ghost:hover { border-color: var(--border2); color: var(--cream); }
-
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    background: var(--surface); border: 0.5px solid var(--gold);
-    color: var(--gold-l); font-size: 12px; letter-spacing: 0.1em;
-    padding: 10px 24px; border-radius: 2px;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s;
-    white-space: nowrap; z-index: 999;
-  }
-  .toast.show { opacity: 1; }
-
-  /* STATS BAR */
-  .stats {
-    display: flex; gap: 12px; margin-bottom: 1.4rem; flex-wrap: wrap;
-  }
-  .stat {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 3px;
-    padding: 10px 18px;
-    font-size: 11px; color: var(--muted); letter-spacing: 0.1em;
-  }
-  .stat strong { display: block; font-size: 20px; font-weight: 300; color: var(--gold-l); margin-bottom: 2px; font-family: 'Bodoni Moda', serif; }
-
-  /* FILTERS */
-  .list-filters {
-    display: flex; gap: 0; margin-bottom: 1rem;
-    border-bottom: 0.5px solid var(--border);
-  }
-  .lf-btn {
-    background: none; border: none; border-bottom: 1.5px solid transparent;
-    color: var(--muted); font-family: 'Jost', sans-serif;
-    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-    padding: 8px 16px; cursor: pointer; transition: all 0.2s;
-    margin-bottom: -0.5px;
-  }
-  .lf-btn.active, .lf-btn:hover { color: var(--cream); }
-  .lf-btn.active { border-bottom-color: var(--gold); }
-
-  /* PRODUCT LIST */
-  .product-list { display: flex; flex-direction: column; gap: 8px; }
-
-  .product-row {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 3px;
-    display: flex; align-items: center; gap: 14px;
-    padding: 12px 14px;
-    transition: border-color 0.2s;
-  }
-  .product-row:hover { border-color: var(--border2); }
-
-  .row-img {
-    width: 48px; height: 48px; flex-shrink: 0;
-    border-radius: 3px; background: var(--card);
-    border: 0.5px solid var(--border);
-    overflow: hidden; display: flex; align-items: center; justify-content: center;
-    color: var(--border2); font-size: 18px;
-  }
-  .row-img img { width: 100%; height: 100%; object-fit: cover; }
-
-  .row-info { flex: 1; min-width: 0; }
-  .row-name { font-size: 14px; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .row-meta { font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: 0.04em; }
-
-  .row-price { font-size: 13px; color: var(--gold-l); min-width: 80px; text-align: right; }
-
-  .row-actions { display: flex; gap: 6px; flex-shrink: 0; }
-
-  .btn-edit, .btn-del {
-    font-family: 'Jost', sans-serif;
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    padding: 6px 12px; border-radius: 2px;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .btn-edit {
-    background: transparent; border: 0.5px solid var(--border);
-    color: var(--muted);
-  }
-  .btn-edit:hover { border-color: var(--gold); color: var(--gold-l); }
-  .btn-del {
-    background: transparent; border: 0.5px solid transparent;
-    color: var(--muted);
-  }
-  .btn-del:hover { color: #e74c3c; border-color: rgba(231,76,60,0.3); }
-
-  .empty-list {
-    text-align: center; padding: 3rem;
-    color: var(--muted); font-size: 12px; letter-spacing: 0.1em;
-  }
-
-  /* EDIT MODAL */
-  .modal-bg {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7); z-index: 200;
-    align-items: center; justify-content: center;
-  }
-  .modal-bg.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border: 0.5px solid var(--border2);
-    border-radius: 4px; padding: 1.8rem;
-    width: min(560px, 94vw);
-    max-height: 90vh; overflow-y: auto;
-  }
-  .modal-title {
-    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 1.4rem;
-  }
-
-  @media (max-width: 560px) {
-    header { padding: 0 1rem; }
-    .page { padding: 1.5rem 1rem 3rem; }
-    .form-grid { grid-template-columns: 1fr; }
-    .form-grid .full { grid-column: 1; }
-    .row-price { display: none; }
-  }
+  body { background:var(--bg); color:var(--cream); font-family:'Jost',sans-serif; font-weight:300; min-height:100vh; }
+  header { background:var(--bg); border-bottom:.5px solid var(--border); padding:0 2rem; height:64px; display:flex; align-items:center; justify-content:space-between; }
+  .logo { font-family:'Bodoni Moda',serif; font-size:16px; font-weight:300; color:#fff; letter-spacing:.28em; text-transform:uppercase; }
+  .logo span { font-family:'Jost',sans-serif; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-left:12px; font-weight:300; }
+  .view-site { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); text-decoration:none; border:.5px solid var(--border2); padding:7px 16px; border-radius:2px; transition:border-color .2s; }
+  .view-site:hover { border-color:var(--gold); }
+  .page { max-width:900px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+  .section-title { font-size:10px; letter-spacing:.26em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; }
+  .form-card { background:var(--surface); border:.5px solid var(--border); border-radius:4px; padding:1.6rem; margin-bottom:2.5rem; }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .form-grid .full { grid-column:1/-1; }
+  label { display:block; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  input,select,textarea { width:100%; background:var(--card); border:.5px solid var(--border); color:var(--cream); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; padding:10px 12px; border-radius:2px; outline:none; transition:border-color .2s; appearance:none; }
+  input:focus,select:focus,textarea:focus { border-color:var(--gold); }
+  input::placeholder,textarea::placeholder { color:var(--muted); }
+  textarea { resize:vertical; min-height:70px; }
+  select option { background:#1a1a1a; }
+  .img-hint { font-size:11px; color:var(--muted); margin-top:5px; line-height:1.6; }
+  .img-preview { width:60px; height:60px; border-radius:3px; border:.5px solid var(--border); background:var(--card); object-fit:cover; margin-top:8px; display:none; }
+  .form-actions { display:flex; gap:10px; margin-top:18px; }
+  .btn-primary { background:var(--gold); color:#0a0a0a; border:none; font-family:'Jost',sans-serif; font-size:11px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; padding:11px 24px; border-radius:2px; cursor:pointer; transition:background .2s; }
+  .btn-primary:hover { background:var(--gold-l); }
+  .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+  .btn-ghost { background:transparent; border:.5px solid var(--border); color:var(--muted); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase; padding:11px 20px; border-radius:2px; cursor:pointer; transition:all .2s; }
+  .btn-ghost:hover { border-color:var(--border2); color:var(--cream); }
+  .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); background:var(--surface); border:.5px solid var(--gold); color:var(--gold-l); font-size:12px; letter-spacing:.1em; padding:10px 24px; border-radius:2px; opacity:0; pointer-events:none; transition:opacity .3s; white-space:nowrap; z-index:999; }
+  .toast.show { opacity:1; }
+  .toast.error { border-color:#e74c3c; color:#e74c3c; }
+  .saving-bar { display:none; position:fixed; top:0; left:0; right:0; height:2px; background:var(--gold); z-index:1000; animation:slide 1.5s infinite; }
+  @keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+  .saving-bar.active { display:block; }
+  .stats { display:flex; gap:12px; margin-bottom:1.4rem; flex-wrap:wrap; }
+  .stat { background:var(--surface); border:.5px solid var(--border); border-radius:3px; padding:10px 18px; font-size:11px; color:var(--muted); letter-spacing:.1em; }
+  .stat strong { display:block; font-size:20px; font-weight:300; color:var(--gold-l); margin-bottom:2px; font-family:'Bodoni Moda',serif; }
+  .list-filters { display:flex; gap:0; margin-bottom:1rem; border-bottom:.5px solid var(--border); }
+  .lf-btn { background:none; border:none; border-bottom:1.5px solid transparent; color:var(--muted); font-family:'Jost',sans-serif; font-size:10px; letter-spacing:.18em; text-transform:uppercase; padding:8px 16px; cursor:pointer; transition:all .2s; margin-bottom:-.5px; }
+  .lf-btn.active,.lf-btn:hover { color:var(--cream); }
+  .lf-btn.active { border-bottom-color:var(--gold); }
+  .product-list { display:flex; flex-direction:column; gap:8px; }
+  .product-row { background:var(--surface); border:.5px solid var(--border); border-radius:3px; display:flex; align-items:center; gap:14px; padding:12px 14px; transition:border-color .2s; }
+  .product-row:hover { border-color:var(--border2); }
+  .row-img { width:48px; height:48px; flex-shrink:0; border-radius:3px; background:var(--card); border:.5px solid var(--border); overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--border2); font-size:18px; }
+  .row-img img { width:100%; height:100%; object-fit:cover; }
+  .row-info { flex:1; min-width:0; }
+  .row-name { font-size:14px; color:var(--cream); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .row-meta { font-size:11px; color:var(--muted); margin-top:2px; letter-spacing:.04em; }
+  .row-price { font-size:13px; color:var(--gold-l); min-width:80px; text-align:right; }
+  .row-actions { display:flex; gap:6px; flex-shrink:0; }
+  .btn-edit,.btn-del { font-family:'Jost',sans-serif; font-size:10px; letter-spacing:.14em; text-transform:uppercase; padding:6px 12px; border-radius:2px; cursor:pointer; transition:all .15s; }
+  .btn-edit { background:transparent; border:.5px solid var(--border); color:var(--muted); }
+  .btn-edit:hover { border-color:var(--gold); color:var(--gold-l); }
+  .btn-del { background:transparent; border:.5px solid transparent; color:var(--muted); }
+  .btn-del:hover { color:#e74c3c; border-color:rgba(231,76,60,.3); }
+  .empty-list { text-align:center; padding:3rem; color:var(--muted); font-size:12px; letter-spacing:.1em; }
+  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:200; align-items:center; justify-content:center; }
+  .modal-bg.open { display:flex; }
+  .modal { background:var(--surface); border:.5px solid var(--border2); border-radius:4px; padding:1.8rem; width:min(560px,94vw); max-height:90vh; overflow-y:auto; }
+  .modal-title { font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:1.4rem; }
+  @media(max-width:560px){header{padding:0 1rem}.page{padding:1.5rem 1rem 3rem}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:1}.row-price{display:none}}
 </style>
 </head>
 <body>
-
+<div class="saving-bar" id="savingBar"></div>
 <header>
   <div class="logo">Zofèra <span>Admin Panel</span></div>
   <a href="index.html" class="view-site">View store →</a>
 </header>
-
 <div class="page">
-
-  <!-- STATS -->
   <div class="stats" id="statsBar"></div>
-
-  <!-- ADD PRODUCT FORM -->
   <p class="section-title">Add new product</p>
   <div class="form-card">
     <div class="form-grid">
-      <div class="full">
-        <label>Product name</label>
-        <input type="text" id="f-name" placeholder="e.g. Rose gold tennis bracelet">
-      </div>
-      <div>
-        <label>Category</label>
+      <div class="full"><label>Product name</label><input type="text" id="f-name" placeholder="e.g. Rose gold tennis bracelet"></div>
+      <div><label>Category</label>
         <select id="f-cat">
           <option value="necklaces">Necklaces</option>
           <option value="pendant-sets">Pendant sets</option>
@@ -294,18 +93,12 @@
           <option value="bracelets">Bracelets</option>
         </select>
       </div>
-      <div>
-        <label>Price (KWD) — leave 0 for "Price on request"</label>
-        <input type="number" id="f-price" placeholder="0.000" min="0" step="0.001">
-      </div>
-      <div class="full">
-        <label>Description</label>
-        <textarea id="f-desc" placeholder="e.g. American diamond · Gold-tone finish"></textarea>
-      </div>
+      <div><label>Price (KWD) — leave 0 for "Price on request"</label><input type="number" id="f-price" placeholder="0.000" min="0" step="0.001"></div>
+      <div class="full"><label>Description</label><textarea id="f-desc" placeholder="e.g. American diamond · Gold-tone finish"></textarea></div>
       <div class="full">
         <label>Image filename</label>
         <input type="text" id="f-image" placeholder="e.g. bracelet1.jpg">
-        <p class="img-hint">Upload your photo to the <strong>images/</strong> folder on GitHub, then type the filename here exactly as you named it.</p>
+        <p class="img-hint">Upload your photo to the <strong>images/</strong> folder on GitHub, then type the filename here exactly.</p>
         <img class="img-preview" id="f-preview" alt="Preview">
       </div>
     </div>
@@ -314,8 +107,6 @@
       <button class="btn-ghost" id="clearBtn">Clear</button>
     </div>
   </div>
-
-  <!-- PRODUCT LIST -->
   <p class="section-title">All products</p>
   <div class="list-filters" id="listFilters">
     <button class="lf-btn active" data-cat="all">All</button>
@@ -326,20 +117,13 @@
     <button class="lf-btn" data-cat="bracelets">Bracelets</button>
   </div>
   <div class="product-list" id="productList"></div>
-
 </div>
-
-<!-- EDIT MODAL -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <p class="modal-title">Edit product</p>
     <div class="form-grid">
-      <div class="full">
-        <label>Product name</label>
-        <input type="text" id="e-name">
-      </div>
-      <div>
-        <label>Category</label>
+      <div class="full"><label>Product name</label><input type="text" id="e-name"></div>
+      <div><label>Category</label>
         <select id="e-cat">
           <option value="necklaces">Necklaces</option>
           <option value="pendant-sets">Pendant sets</option>
@@ -348,19 +132,9 @@
           <option value="bracelets">Bracelets</option>
         </select>
       </div>
-      <div>
-        <label>Price (KWD)</label>
-        <input type="number" id="e-price" min="0" step="0.001">
-      </div>
-      <div class="full">
-        <label>Description</label>
-        <textarea id="e-desc"></textarea>
-      </div>
-      <div class="full">
-        <label>Image filename</label>
-        <input type="text" id="e-image" placeholder="e.g. ring1.jpg">
-        <img class="img-preview" id="e-preview" alt="Preview">
-      </div>
+      <div><label>Price (KWD)</label><input type="number" id="e-price" min="0" step="0.001"></div>
+      <div class="full"><label>Description</label><textarea id="e-desc"></textarea></div>
+      <div class="full"><label>Image filename</label><input type="text" id="e-image" placeholder="e.g. ring1.jpg"><img class="img-preview" id="e-preview" alt="Preview"></div>
     </div>
     <div class="form-actions" style="margin-top:18px">
       <button class="btn-primary" id="saveEditBtn">Save changes</button>
@@ -368,202 +142,168 @@
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
+const GITHUB_TOKEN = "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";
+const GITHUB_REPO  = "zobyakazi/Zofera";
+const FILE_PATH    = "products.json";
+const API_BASE     = `https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`;
+
 const CAT_LABELS = {
-  "necklaces": "Necklaces",
-  "pendant-sets": "Pendant sets",
-  "earrings": "Earrings",
-  "rings": "Rings",
-  "bracelets": "Bracelets"
+  "necklaces":"Necklaces","pendant-sets":"Pendant sets",
+  "earrings":"Earrings","rings":"Rings","bracelets":"Bracelets"
 };
 
-const DEFAULT_PRODUCTS = [
-  { id:1, name:"Emerald drop pendant set", cat:"pendant-sets", price:45, desc:"American diamond & emerald crystal · Gold-tone finish", image:"" },
-  { id:2, name:"Crescent collar necklace", cat:"necklaces", price:38, desc:"Pavé-set American diamonds · Silver-tone", image:"" },
-  { id:3, name:"Leaf motif earrings", cat:"earrings", price:22, desc:"Drop style · Gold-tone with emerald accent", image:"" },
-  { id:4, name:"Floral stud earrings", cat:"earrings", price:18, desc:"American diamond cluster · Rose gold finish", image:"" },
-  { id:5, name:"Waterfall drop earrings", cat:"earrings", price:28, desc:"Long chandelier style · Silver & emerald", image:"" },
-  { id:6, name:"Solitaire band ring", cat:"rings", price:20, desc:"Round-cut American diamond · Gold-tone band", image:"" },
-  { id:7, name:"Tennis bracelet", cat:"bracelets", price:55, desc:"Full pavé American diamond line · Silver-tone", image:"" },
-  { id:8, name:"Vine bangle", cat:"bracelets", price:32, desc:"Engraved motif · Gold-tone", image:"" }
-];
-
-function load() {
-  try {
-    const s = localStorage.getItem('zofera_products');
-    return s ? JSON.parse(s) : [...DEFAULT_PRODUCTS];
-  } catch(e) { return [...DEFAULT_PRODUCTS]; }
-}
-function save(products) {
-  localStorage.setItem('zofera_products', JSON.stringify(products));
-}
-
-let products = load();
+let products = [];
+let fileSha = null;
 let listFilter = "all";
 let editingId = null;
 
-function nextId() {
-  return products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+function showSaving(on) { document.getElementById("savingBar").classList.toggle("active", on); }
+
+function toast(msg, isError=false) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = "toast" + (isError?" error":"") + " show";
+  setTimeout(()=>t.classList.remove("show"), 2500);
 }
 
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+async function fetchProducts() {
+  try {
+    const res = await fetch(API_BASE, { headers:{ Authorization:`token ${GITHUB_TOKEN}`, Accept:"application/vnd.github.v3+json" }});
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    fileSha = data.sha;
+    products = JSON.parse(atob(data.content.replace(/\n/g,""))) || [];
+  } catch(e) { products = []; toast("Could not load products — check your token", true); }
+  render();
 }
+
+async function saveProducts() {
+  showSaving(true);
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))));
+    const body = { message:"Update products", content, sha:fileSha };
+    const res = await fetch(API_BASE, { method:"PUT", headers:{ Authorization:`token ${GITHUB_TOKEN}`, Accept:"application/vnd.github.v3+json", "Content-Type":"application/json" }, body:JSON.stringify(body) });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    fileSha = data.content.sha;
+    showSaving(false);
+    return true;
+  } catch(e) { showSaving(false); toast("Save failed — check your token", true); return false; }
+}
+
+function nextId() { return products.length ? Math.max(...products.map(p=>p.id))+1 : 1; }
 
 function renderStats() {
   const counts = {};
-  Object.keys(CAT_LABELS).forEach(c => counts[c] = 0);
-  products.forEach(p => { if (counts[p.cat] !== undefined) counts[p.cat]++; });
-  document.getElementById('statsBar').innerHTML =
+  Object.keys(CAT_LABELS).forEach(c=>counts[c]=0);
+  products.forEach(p=>{ if(counts[p.cat]!==undefined) counts[p.cat]++; });
+  document.getElementById("statsBar").innerHTML =
     `<div class="stat"><strong>${products.length}</strong>Total pieces</div>` +
-    Object.entries(CAT_LABELS).map(([k,v]) =>
-      `<div class="stat"><strong>${counts[k]}</strong>${v}</div>`
-    ).join('');
+    Object.entries(CAT_LABELS).map(([k,v])=>`<div class="stat"><strong>${counts[k]}</strong>${v}</div>`).join("");
 }
 
 function renderList() {
-  const list = listFilter === 'all' ? products : products.filter(p => p.cat === listFilter);
-  const el = document.getElementById('productList');
-  if (!list.length) {
-    el.innerHTML = `<div class="empty-list">No products in this category yet.</div>`;
-    return;
-  }
-  el.innerHTML = list.map(p => `
-    <div class="product-row" data-id="${p.id}">
-      <div class="row-img">
-        ${p.image ? `<img src="images/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='📷'">` : '📷'}
-      </div>
+  const list = listFilter==="all" ? products : products.filter(p=>p.cat===listFilter);
+  const el = document.getElementById("productList");
+  if(!list.length){ el.innerHTML=`<div class="empty-list">No products here yet.</div>`; return; }
+  el.innerHTML = list.map(p=>`
+    <div class="product-row">
+      <div class="row-img">${p.image?`<img src="images/${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='📷'">`:"📷"}</div>
       <div class="row-info">
         <div class="row-name">${p.name}</div>
-        <div class="row-meta">${CAT_LABELS[p.cat] || p.cat}${p.desc ? ' · ' + p.desc : ''}</div>
+        <div class="row-meta">${CAT_LABELS[p.cat]||p.cat}${p.desc?" · "+p.desc:""}</div>
       </div>
-      <div class="row-price">${p.price ? 'KWD ' + p.price.toFixed(3) : 'On request'}</div>
+      <div class="row-price">${p.price?"KWD "+p.price.toFixed(3):"On request"}</div>
       <div class="row-actions">
         <button class="btn-edit" data-id="${p.id}">Edit</button>
         <button class="btn-del" data-id="${p.id}" title="Delete">✕</button>
       </div>
-    </div>
-  `).join('');
-
-  el.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => openEdit(+b.dataset.id)));
-  el.querySelectorAll('.btn-del').forEach(b => b.addEventListener('click', () => deleteProduct(+b.dataset.id)));
+    </div>`).join("");
+  el.querySelectorAll(".btn-edit").forEach(b=>b.addEventListener("click",()=>openEdit(+b.dataset.id)));
+  el.querySelectorAll(".btn-del").forEach(b=>b.addEventListener("click",()=>deleteProduct(+b.dataset.id)));
 }
 
 function render() { renderStats(); renderList(); }
 
-/* ── ADD ── */
-document.getElementById('addBtn').addEventListener('click', () => {
-  const name = document.getElementById('f-name').value.trim();
-  if (!name) { toast('Please enter a product name'); return; }
-  const p = {
-    id: nextId(),
-    name,
-    cat: document.getElementById('f-cat').value,
-    price: parseFloat(document.getElementById('f-price').value) || 0,
-    desc: document.getElementById('f-desc').value.trim(),
-    image: document.getElementById('f-image').value.trim()
-  };
+document.getElementById("addBtn").addEventListener("click", async()=>{
+  const name = document.getElementById("f-name").value.trim();
+  if(!name){ toast("Please enter a product name",true); return; }
+  const btn = document.getElementById("addBtn");
+  btn.disabled=true; btn.textContent="Saving...";
+  const p = { id:nextId(), name, cat:document.getElementById("f-cat").value, price:parseFloat(document.getElementById("f-price").value)||0, desc:document.getElementById("f-desc").value.trim(), image:document.getElementById("f-image").value.trim() };
   products.push(p);
-  save(products);
-  render();
-  clearForm();
-  toast('✦ Product added');
+  const ok = await saveProducts();
+  btn.disabled=false; btn.textContent="Add product";
+  if(ok){ render(); clearForm(); toast("✦ Product added — live on store!"); }
+  else products.pop();
 });
 
-document.getElementById('clearBtn').addEventListener('click', clearForm);
-
-function clearForm() {
-  ['f-name','f-price','f-desc','f-image'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-cat').value = 'necklaces';
-  document.getElementById('f-preview').style.display = 'none';
+document.getElementById("clearBtn").addEventListener("click", clearForm);
+function clearForm(){
+  ["f-name","f-price","f-desc","f-image"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("f-cat").value="necklaces";
+  document.getElementById("f-preview").style.display="none";
 }
 
-/* image preview on filename input */
-document.getElementById('f-image').addEventListener('input', function() {
-  const prev = document.getElementById('f-preview');
-  if (this.value.trim()) {
-    prev.src = 'images/' + this.value.trim();
-    prev.style.display = 'block';
-    prev.onerror = () => prev.style.display = 'none';
-  } else { prev.style.display = 'none'; }
+document.getElementById("f-image").addEventListener("input",function(){
+  const prev=document.getElementById("f-preview");
+  if(this.value.trim()){ prev.src="images/"+this.value.trim(); prev.style.display="block"; prev.onerror=()=>prev.style.display="none"; }
+  else prev.style.display="none";
 });
 
-/* ── LIST FILTER ── */
-document.getElementById('listFilters').addEventListener('click', e => {
-  const btn = e.target.closest('.lf-btn');
-  if (!btn) return;
-  document.querySelectorAll('.lf-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  listFilter = btn.dataset.cat;
-  renderList();
+document.getElementById("listFilters").addEventListener("click",e=>{
+  const btn=e.target.closest(".lf-btn"); if(!btn)return;
+  document.querySelectorAll(".lf-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active"); listFilter=btn.dataset.cat; renderList();
 });
 
-/* ── DELETE ── */
-function deleteProduct(id) {
-  if (!confirm('Remove this product from your store?')) return;
-  products = products.filter(p => p.id !== id);
-  save(products);
-  render();
-  toast('Product removed');
+async function deleteProduct(id){
+  if(!confirm("Remove this product from your store?"))return;
+  const prev=[...products]; products=products.filter(p=>p.id!==id);
+  const ok=await saveProducts();
+  if(ok){ render(); toast("Product removed"); }
+  else{ products=prev; render(); }
 }
 
-/* ── EDIT ── */
-function openEdit(id) {
-  const p = products.find(x => x.id === id);
-  if (!p) return;
-  editingId = id;
-  document.getElementById('e-name').value = p.name;
-  document.getElementById('e-cat').value = p.cat;
-  document.getElementById('e-price').value = p.price || '';
-  document.getElementById('e-desc').value = p.desc || '';
-  document.getElementById('e-image').value = p.image || '';
-  const prev = document.getElementById('e-preview');
-  if (p.image) { prev.src = 'images/' + p.image; prev.style.display = 'block'; prev.onerror = () => prev.style.display = 'none'; }
-  else prev.style.display = 'none';
-  document.getElementById('modalBg').classList.add('open');
+function openEdit(id){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  editingId=id;
+  document.getElementById("e-name").value=p.name;
+  document.getElementById("e-cat").value=p.cat;
+  document.getElementById("e-price").value=p.price||"";
+  document.getElementById("e-desc").value=p.desc||"";
+  document.getElementById("e-image").value=p.image||"";
+  const prev=document.getElementById("e-preview");
+  if(p.image){ prev.src="images/"+p.image; prev.style.display="block"; prev.onerror=()=>prev.style.display="none"; }
+  else prev.style.display="none";
+  document.getElementById("modalBg").classList.add("open");
 }
 
-document.getElementById('e-image').addEventListener('input', function() {
-  const prev = document.getElementById('e-preview');
-  if (this.value.trim()) {
-    prev.src = 'images/' + this.value.trim();
-    prev.style.display = 'block';
-    prev.onerror = () => prev.style.display = 'none';
-  } else prev.style.display = 'none';
+document.getElementById("e-image").addEventListener("input",function(){
+  const prev=document.getElementById("e-preview");
+  if(this.value.trim()){ prev.src="images/"+this.value.trim(); prev.style.display="block"; prev.onerror=()=>prev.style.display="none"; }
+  else prev.style.display="none";
 });
 
-document.getElementById('saveEditBtn').addEventListener('click', () => {
-  const name = document.getElementById('e-name').value.trim();
-  if (!name) { toast('Name cannot be empty'); return; }
-  products = products.map(p => p.id === editingId ? {
-    ...p,
-    name,
-    cat: document.getElementById('e-cat').value,
-    price: parseFloat(document.getElementById('e-price').value) || 0,
-    desc: document.getElementById('e-desc').value.trim(),
-    image: document.getElementById('e-image').value.trim()
-  } : p);
-  save(products);
-  render();
-  closeModal();
-  toast('✦ Changes saved');
+document.getElementById("saveEditBtn").addEventListener("click",async()=>{
+  const name=document.getElementById("e-name").value.trim();
+  if(!name){ toast("Name cannot be empty",true); return; }
+  const btn=document.getElementById("saveEditBtn");
+  btn.disabled=true; btn.textContent="Saving...";
+  const prev=[...products];
+  products=products.map(p=>p.id===editingId?{...p,name,cat:document.getElementById("e-cat").value,price:parseFloat(document.getElementById("e-price").value)||0,desc:document.getElementById("e-desc").value.trim(),image:document.getElementById("e-image").value.trim()}:p);
+  const ok=await saveProducts();
+  btn.disabled=false; btn.textContent="Save changes";
+  if(ok){ render(); closeModal(); toast("✦ Changes saved — live on store!"); }
+  else{ products=prev; render(); }
 });
 
-document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
-document.getElementById('modalBg').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.getElementById("cancelEditBtn").addEventListener("click",closeModal);
+document.getElementById("modalBg").addEventListener("click",e=>{ if(e.target===e.currentTarget)closeModal(); });
+function closeModal(){ document.getElementById("modalBg").classList.remove("open"); editingId=null; }
 
-function closeModal() {
-  document.getElementById('modalBg').classList.remove('open');
-  editingId = null;
-}
-
-render();
+fetchProducts();
 </script>
 </body>
 </html>
